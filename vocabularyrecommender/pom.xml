@@ -23,7 +23,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-war-plugin</artifactId>
-        <version>LATEST</version>
+        <version>3.0.0</version>
         <configuration>
           <failOnMissingWebXml>false</failOnMissingWebXml>
         </configuration>
@@ -39,25 +39,20 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>cz.muni.fi.pv245.vocabularyrecommender</groupId>
-      <artifactId>vocabularyrecommender</artifactId>
-      <version>1.0-SNAPSHOT</version>
+      <groupId>javax</groupId>
+      <artifactId>javaee-web-api</artifactId>
+      <version>6.0</version>
+      <scope>provided</scope>
     </dependency>
     <dependency>
-      <groupId>cz.muni.fi.pv245.vocabularyrecommender</groupId>
-      <artifactId>vocabularyrecommender</artifactId>
-      <version>1.0-SNAPSHOT</version>
+      <groupId>javax.servlet.jsp.jstl</groupId>
+      <artifactId>javax.servlet.jsp.jstl-api</artifactId>
+      <version>1.2.1</version>
+    </dependency>
+    <dependency>
+        <groupId>com.restfb</groupId>
+        <artifactId>restfb</artifactId>
+        <version>1.33.0</version>
     </dependency>
   </dependencies>
-  <dependency>
-    <groupId>javax</groupId>
-    <artifactId>javaee-web-api</artifactId>
-    <version>6.0</version>
-    <scope>provided</scope>
-  </dependency>
-  <dependency>
-    <groupId>javax.servlet.jsp.jstl</groupId>
-    <artifactId>javax.servlet.jsp.jstl-api</artifactId>
-    <version>1.2.1</version>
-  </dependency>
 </project>
