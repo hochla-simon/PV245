@@ -1,0 +1,7 @@
+source 'https://rubygems.org'
+gem 'rake'
+gem 'ruby-tf-idf'
+gem 'highscore'
+gem 'bloomfilter-rb'
+gem 'stemmer'
+gem 'json'
