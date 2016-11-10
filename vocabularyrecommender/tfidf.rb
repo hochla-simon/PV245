@@ -1,29 +1,33 @@
 #!/usr/bin/env ruby
 
-#Potrebne mat nainstalovane ruby, gem a sputit prikazy:
-# gem install bundler
-# bundle install 
-
-#require 'rubygems'
-require 'ruby-tf-idf'
+require './tfidf_lib/ruby-tf-idf'
 require 'json'
+require 'active_support/inflector'
 
-filename = 'input.json'
+filename = 'inputExample.json'
 filename = ARGV[1] if ARGV[1]
 
-limit = 1 #restrict to the top 3 relevant words per document
+limit = 3 #restrict to the top 3 relevant words per document
 limit = ARGV[0].to_i if ARGV[0]
 
+def tfidf(filename, limit)
+	file = File.read(filename)
+	corpus = JSON.parse(file)
+	
+	corpus.map! {|text| text.parameterize.underscore.humanize} 
+	exclude_stop_words = true
 
-file = File.read(filename)
-corpus = JSON.parse(file)
+	@t = RubyTfIdf::TfIdf.new(corpus, limit, exclude_stop_words)
+	output =  @t.tf_idf
 
-exclude_stop_words = true
+	output.each do |my_hash|
+		my_hash.each { |k, v| my_hash[k] = v.round(2) }
+	end 
+	#puts output
+	json_str = output.to_json
+	File.open("tfidf_output.json", 'w') { |file| file.write(json_str) }
 
-@t = RubyTfIdf::TfIdf.new(corpus, limit, exclude_stop_words)
-output =  @t.tf_idf
-#puts output
+	return json_str
+end
 
-json_str = output.to_json
-File.open("tfidf_output.json", 'w') { |file| file.write(json_str) }
-puts json_str
+puts tfidf(filename, limit)

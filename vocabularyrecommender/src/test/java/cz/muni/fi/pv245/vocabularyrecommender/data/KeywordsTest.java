@@ -23,7 +23,7 @@ public class KeywordsTest extends TestCase {
         System.out.println("keywordsTest");
         int limit = 1;
         String filename = "inputExample.json";
-        String expResult = "[{\"hammer\":13.666666666666668},{\"bird\":14.0},{\"bird\":14.0},{\"week.\":13.4},{\"desk\":28.0},{\"cynic\":14.2}]";
+        String expResult = "[{\"rieseni\":25.43},{\"bird\":14.0},{\"bird\":14.0},{\"career\":13.0},{\"desk\":28.0},{\"cynic\":14.2}]";
         String result = Keywords.getKeywords(limit, filename);
         //System.out.print(result);
 

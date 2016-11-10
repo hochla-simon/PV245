@@ -5,25 +5,44 @@ require 'highscore'
 require 'bloomfilter-rb'
 require 'stemmer'
 require 'json'
+require 'active_support/inflector'
+require 'whatlanguage'
 
-filename = 'input.json'
-filename = ARGV[1] if ARGV[1]
 
-limit = 2
-limit = ARGV[0].to_i if ARGV[0]
+@blacklistCZ  = Highscore::Blacklist.load_file "stopwords/stopwords_cz.txt"
+@blacklistENG = Highscore::Blacklist.load_file "stopwords/stopwords_en.txt"
+@blacklistSK  = Highscore::Blacklist.load_file "stopwords/stopwords_sk.txt"
+#blacklistUniversal = Highscore::Blacklist.load_file "stopwords/stopwords.txt"
 
-file = File.read(filename)
-corpus = JSON.parse(file)
+def whatLanguage txt 
+	if txt.include? 'sa'
+		:slovak
+	elsif txt.include? 'se'
+		:czech 
+	elsif txt.include? 'and'
+		:english 
+	end
+end
 
-array = []
+def what_blacklist(text)
+	wl = WhatLanguage.new(:all)
+	case wl.language(text)
+	#case whatLanguage text
+	when :czech
+		return @blacklistCZ
+	when :slovak
+		return @blacklistSK
+	else
+		return @blacklistENG
+	end
+end
 
-blacklistCZ  = Highscore::Blacklist.load_file "stopwords/stopwords_cz.txt"
-blacklistENG = Highscore::Blacklist.load_file "stopwords/stopwords_en.txt"
-blacklistSK  = Highscore::Blacklist.load_file "stopwords/stopwords_sk.txt"
-#blacklist = blacklist = Highscore::Blacklist.load_file "stopwords.txt"
+def integer?(str)
+  /[+-]?\d+/ === str
+end
 
-corpus.each do |text|
-	keywords = text.keywords(blacklistENG) do
+def count_keywords(text, blacklist)
+	keywords = text.keywords(blacklist) do
 	  set :multiplier, 10
 	  set :upper_case, 3
 	  set :long_words, 2
@@ -36,15 +55,38 @@ corpus.each do |text|
 	  set :word_pattern, /[\w]+[^\s0-9]/ # => default: /\w+/
 	  set :stemming, true                # => default: false
 	end
-
-	output = Hash.new
-	keywords.top(limit).each do |k|
-		output[k.text] = k.weight
-	end
-	array.push(output)
+	return keywords
 end
 
-json_str = array.to_json
-File.open("keyword_output.json", 'w') { |file| file.write(json_str) }
+filename = 'inputExample.json'
+filename = ARGV[1] if ARGV[1]
 
-puts json_str
+limit = 3
+limit = ARGV[0].to_i if ARGV[0]
+
+def get_keywords(filename, limit)
+	file = File.read(filename)
+	corpus = JSON.parse(file)
+
+	array = []
+
+	corpus.each do |text|
+
+		blacklist = what_blacklist(text)
+		text = text.parameterize.underscore.humanize
+
+		keywords = count_keywords(text, blacklist)
+
+		output = Hash.new
+		keywords.top(limit).each do |k|		
+			output[k.text] = k.weight.round(2) unless integer? k.text
+		end
+		array.push(output)
+	end
+
+	json_str = array.to_json
+	File.open("keyword_output.json", 'w') { |file| file.write(json_str) }
+	return json_str
+end
+
+puts get_keywords(filename, limit)
