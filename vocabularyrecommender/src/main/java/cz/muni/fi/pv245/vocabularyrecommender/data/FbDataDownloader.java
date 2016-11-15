@@ -13,7 +13,6 @@ import com.restfb.types.User;
 import com.restfb.Version;
 import com.restfb.exception.FacebookOAuthException;
 import com.restfb.json.JsonObject;
-import com.restfb.json.JsonArray;
 import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
