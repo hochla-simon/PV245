@@ -3,6 +3,7 @@
 require './tfidf_lib/ruby-tf-idf'
 require 'json'
 require 'active_support/inflector'
+require 'cld'
 
 filename = 'inputExample.json'
 filename = ARGV[1] if ARGV[1]
@@ -19,11 +20,13 @@ def tfidf(filename, limit)
 
 	@t = RubyTfIdf::TfIdf.new(corpus, limit, exclude_stop_words)
 	output =  @t.tf_idf
-
+	i = 0;
 	output.each do |my_hash|
-		my_hash.each { |k, v| my_hash[k] = v.round(2) }
+		#my_hash.each { |k, v| my_hash[k] = v.round(2) }
+		my_hash.each { |k, v| my_hash[k] = CLD.detect_language(corpus[i])[:code] }
+		i += 1
 	end 
-	#puts output
+
 	json_str = output.to_json
 	File.open("tfidf_output.json", 'w') { |file| file.write(json_str) }
 

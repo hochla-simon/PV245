@@ -20,7 +20,7 @@ public class TfIdfTest extends TestCase {
         System.out.println("tfidfTest");
         int limit = 1;
         String filename = "inputExample.json";
-        String expResult = "[{\"rok\":1.56},{\"big\":0.78},{\"better\":0.78},{\"career\":0.78},{\"desk\":1.56},{\"cynic\":0.78}]";
+        String expResult = "[{\"rok\":\"sk\"},{\"big\":\"en\"},{\"better\":\"en\"},{\"career\":\"en\"},{\"desk\":\"en\"},{\"cynic\":\"en\"}]";
         String result = TfIdf.getTfidf(limit, filename);
         //System.out.print(result);
         assertEquals(expResult, result);
