@@ -6,7 +6,7 @@
     <display-name>Facebook Login Application</display-name>
     <servlet>
         <servlet-name>MainMenu</servlet-name>
-        <servlet-class>com.javapapers.java.social.facebook.MainMenu</servlet-class>
+        <servlet-class>cz.muni.fi.pv245.vocabularyrecommender.web.MainMenu</servlet-class>
     </servlet>
 
     <servlet-mapping>
@@ -14,4 +14,4 @@
         <url-pattern>/fbhome</url-pattern>
     </servlet-mapping>
 
-</web-app>   
+</web-app>
