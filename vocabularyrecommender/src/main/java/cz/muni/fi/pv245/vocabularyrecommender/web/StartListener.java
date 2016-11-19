@@ -6,9 +6,6 @@ import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
 import cz.muni.fi.pv245.vocabularyrecommender.data.FbDataDownloader;
 
-/**
- * Created by simon on 28. 10. 2016.
- */
 @WebListener
 public class StartListener implements ServletContextListener {
 

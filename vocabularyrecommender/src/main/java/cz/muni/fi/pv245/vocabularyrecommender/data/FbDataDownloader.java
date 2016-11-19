@@ -58,6 +58,7 @@ public class FbDataDownloader {
         JSONArray obj = new JSONArray();
         for (String d : col) {
             obj.add(d);
+            System.out.println(d);
         }
         Writer out = new BufferedWriter(new OutputStreamWriter(
             new FileOutputStream(fileName), "UTF-8"));

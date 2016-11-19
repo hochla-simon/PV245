@@ -6,7 +6,7 @@ require 'bloomfilter-rb'
 require 'stemmer'
 require 'json'
 require 'active_support/inflector'
-require 'whatlanguage'
+require "cld"
 
 
 @blacklistCZ  = Highscore::Blacklist.load_file "stopwords/stopwords_cz.txt"
@@ -21,16 +21,16 @@ def whatLanguage txt
 		:czech 
 	elsif txt.include? 'and'
 		:english 
+	else
+		:english
 	end
 end
 
 def what_blacklist(text)
-	wl = WhatLanguage.new(:all)
-	case wl.language(text)
-	#case whatLanguage text
-	when :czech
+	case CLD.detect_language(text)[:code]
+	when "cz"
 		return @blacklistCZ
-	when :slovak
+	when "sk"
 		return @blacklistSK
 	else
 		return @blacklistENG
@@ -71,6 +71,8 @@ def get_keywords(filename, limit)
 	array = []
 
 	corpus.each do |text|
+		
+		#puts CLD.detect_language(text)[:code]
 
 		blacklist = what_blacklist(text)
 		text = text.parameterize.underscore.humanize
@@ -79,7 +81,8 @@ def get_keywords(filename, limit)
 
 		output = Hash.new
 		keywords.top(limit).each do |k|		
-			output[k.text] = k.weight.round(2) unless integer? k.text
+			#output[k.text] = k.weight.round(2) unless integer? k.text
+			output[k.text] = CLD.detect_language(text)[:code]
 		end
 		array.push(output)
 	end
