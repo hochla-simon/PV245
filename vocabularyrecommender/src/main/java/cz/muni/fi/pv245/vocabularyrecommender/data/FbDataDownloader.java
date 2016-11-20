@@ -13,7 +13,6 @@ import com.restfb.types.User;
 import com.restfb.Version;
 import com.restfb.exception.FacebookOAuthException;
 import com.restfb.json.JsonObject;
-import com.restfb.json.JsonArray;
 import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -33,7 +32,7 @@ import org.json.simple.JSONArray;
 public class FbDataDownloader {
     
     public static void main(String[] args) throws IOException, MalformedURLException {
-        String MY_ACCESS_TOKEN = "EAACEdEose0cBAE1oggAeA0olpuXyznsAV3rYciNIGzrCUov4ok7ZA11veeTOWAQZBZBsjoZAXSdNinFsZCwPyc6SCYGkDc119YZCCA3yayUplwvCrxzPdJIa7kzU6k8khhKbWW8rj8UL0F8Yo4lzkZBmymfmgiFlVZBcEFsrAnQd1AZDZD";
+        String MY_ACCESS_TOKEN = "AQDYO3NusZbu2Ha6eatDUJNmfnavppZlWz4AgVhGy1i1bhiks31KOzeHsduFB8UVXiXn11ySXazoDBKaLcI7mni772r3B9Gc2gexdp0u-dyDo06A__cSY_KAel1Ce-Q1S5lxuDzvq5Ktsa4duvoFwQhYnvih5r8vzlp3Wft0kV1h_4XU__MCLG854Xzsd9C_4ZBglt0FqTRH5PqMRC0VmcCptl2bf8ZqPeGTHLaSunTzGh7lt48h8cjYRh2HuAumbmVxFripCQXpQV7ztN8NSfnf_nkVJgdX95QS5VNyMxeq44od-t7RBL9396tz-OTM4PY";
         downloadFbData(MY_ACCESS_TOKEN);
     }  
     
@@ -59,7 +58,6 @@ public class FbDataDownloader {
         JSONArray obj = new JSONArray();
         for (String d : col) {
             obj.add(d);
-            System.out.println(d);
         }
         Writer out = new BufferedWriter(new OutputStreamWriter(
             new FileOutputStream(fileName), "UTF-8"));
@@ -73,9 +71,16 @@ public class FbDataDownloader {
     private static Collection<String> getEvents(FacebookClient facebookClient) {
         JsonObject eventsConnection = facebookClient.fetchObject("me/events", JsonObject.class);
         List<String> col = new ArrayList<>();
+        String oneEntry;
         for (int i=0; i<eventsConnection.getJsonArray("data").length(); i++) {
-            col.add(eventsConnection.getJsonArray("data").getJsonObject(i).getString("name") + "\n" + 
-                    eventsConnection.getJsonArray("data").getJsonObject(i).getString("description"));
+            oneEntry = "";
+            if (eventsConnection.getJsonArray("data").getJsonObject(i).has("name")) {
+                oneEntry += eventsConnection.getJsonArray("data").getJsonObject(i).getString("name") + "\n";
+            }
+            if (eventsConnection.getJsonArray("data").getJsonObject(i).has("description")) {
+                oneEntry += eventsConnection.getJsonArray("data").getJsonObject(i).getString("description");
+            }
+            col.add(oneEntry);
         }
         return col;
     }
