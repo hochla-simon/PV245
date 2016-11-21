@@ -12,10 +12,11 @@ import junit.framework.TestCase;
  * @author tomas
  */
 public class KeywordsTest extends TestCase {
-    
+
     public KeywordsTest(String testName) {
         super(testName);
     }
+
     /**
      * Test of getKeywords method, of class Keywords.
      */
@@ -23,11 +24,11 @@ public class KeywordsTest extends TestCase {
         System.out.println("keywordsTest");
         int limit = 1;
         String filename = "inputExample.json";
-        String expResult = "[{\"rieseni\":\"sk\"},{\"bird\":\"en\"},{\"bird\":\"en\"},{\"career\":\"en\"},{\"desk\":\"en\"},{\"cynic\":\"en\"}]";
+        String expResult = "[{\"rieseni\":\"sk\"},{\"bird\":\"en\"},{\"bird\":\"en\"},{\"career\":\"en\"},{\"desk\":\"en\"},{\"cynic\":\"en\"}]\n";
+        
         String result = Keywords.getKeywords(limit, filename);
-        //System.out.print(result);
-
+        //System.out.println(result);
         assertEquals(expResult, result);
     }
-    
+
 }

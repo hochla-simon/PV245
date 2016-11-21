@@ -1,7 +1,9 @@
 #!/bin/env ruby
 # encoding: ISO-8859-1
 
-require "ruby-tf-idf/version"
+module RubyTfIdf
+      VERSION = "0.0.3"
+end
 
 module RubyTfIdf
 

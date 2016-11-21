@@ -18,6 +18,7 @@
                 <configuration>
                     <source>8</source>
                     <target>8</target>
+                    <!--<includeRubygemsInResources>true</includeRubygemsInResources>-->
                 </configuration>
             </plugin>
             <plugin>
@@ -26,28 +27,52 @@
                 <version>3.0.0</version>
                 <configuration>
                     <failOnMissingWebXml>false</failOnMissingWebXml>
+                    <!--<includeRubygemsInResources>true</includeRubygemsInResources>-->
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>de.saumya.mojo</groupId>
+                <artifactId>gem-maven-plugin</artifactId>
+                <version>1.0.0</version>
+                <configuration>
+                    <includeRubygemsInResources>true</includeRubygemsInResources>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>initialize</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
 
+    <repositories>
+        <repository>
+            <id>rubygems-releases</id>
+            <url>http://rubygems-proxy.torquebox.org/releases</url>
+        </repository>
+    </repositories>
+
     <dependencies>
         <dependency>
-          <groupId>junit</groupId>
-          <artifactId>junit</artifactId>
-          <version>3.8.1</version>
-          <scope>test</scope>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>3.8.1</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>javax</groupId>
+            <artifactId>javaee-web-api</artifactId>
+            <version>6.0</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
-          <groupId>javax</groupId>
-          <artifactId>javaee-web-api</artifactId>
-          <version>6.0</version>
-          <scope>provided</scope>
-        </dependency>
-        <dependency>
-          <groupId>javax.servlet.jsp.jstl</groupId>
-          <artifactId>javax.servlet.jsp.jstl-api</artifactId>
-          <version>1.2.1</version>
+            <groupId>javax.servlet.jsp.jstl</groupId>
+            <artifactId>javax.servlet.jsp.jstl-api</artifactId>
+            <version>1.2.1</version>
         </dependency>
         <dependency>
             <groupId>com.restfb</groupId>
@@ -67,7 +92,46 @@
         <dependency>
             <groupId>org.jruby</groupId>
             <artifactId>jruby-complete</artifactId>
-            <version>9.1.2.0</version>
+            <version>1.7.11</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.3</version>
+            <scope>compile</scope>
+        </dependency> 
+        <dependency>
+            <groupId>rubygems</groupId>
+            <artifactId>cld</artifactId>
+            <version>0.7.0</version>
+            <type>gem</type>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>rubygems</groupId>
+            <artifactId>json</artifactId>
+            <version>2.0.2</version>
+            <type>gem</type>
+            <scope>provided</scope>
+        </dependency> 
+        <dependency>
+            <groupId>rubygems</groupId>
+            <artifactId>i18n</artifactId>
+            <version>0.7.0</version>
+            <type>gem</type>
+            <scope>provided</scope>
+        </dependency> 
+        <dependency>
+            <groupId>rubygems</groupId>
+            <artifactId>highscore</artifactId>
+            <version>1.2.1</version>
+            <type>gem</type>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.randombits.utils</groupId>
+            <artifactId>rb-utils</artifactId>
+            <version>2.0.0</version>
         </dependency>
         <dependency>
           <groupId>com.google.code.gson</groupId>

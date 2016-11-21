@@ -1,8 +1,8 @@
 package cz.muni.fi.pv245.vocabularyrecommender.data;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.StringWriter;
+import org.jruby.embed.PathType;
+import org.jruby.embed.ScriptingContainer;
 
 /**
  * Class generete rank keywords from given file with texts in json format
@@ -15,22 +15,21 @@ import java.io.InputStreamReader;
 public class Keywords {
 
     public static String getKeywords(int limit, String filename) {
-        String line = "";
+        String line = " ";
 
         try {
-            String[] argv = new String[4];
-            argv[0] = "ruby";
-            argv[1] = "keywords.rb";
-            argv[2] = "" + limit;
-            argv[3] = filename;
-
-            Process process = Runtime.getRuntime().exec(argv);
-            process.waitFor();
-
-            BufferedReader processIn = new BufferedReader(
-                    new InputStreamReader(process.getInputStream()));
-
-            line = processIn.readLine();
+            ScriptingContainer container = new ScriptingContainer();
+            String[] argv = new String[2];
+            argv[0] = "" + limit;
+            argv[1] = filename;
+            container.setArgv(argv);
+            
+            StringWriter stringWriter = new StringWriter();
+            container.setWriter(stringWriter);
+            
+            container.runScriptlet(PathType.RELATIVE, "keywords.rb");
+            line = stringWriter.toString();
+            
         } catch (Exception e) {
             e.printStackTrace();
         }

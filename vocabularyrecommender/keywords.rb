@@ -1,12 +1,14 @@
 #!/usr/bin/env ruby
 
-require 'rake_text'
+# require 'rake_text'
+require 'rubygems'
 require 'highscore'
-require 'bloomfilter-rb'
-require 'stemmer'
+# require 'bloomfilter-rb'
+# require 'stemmer'
 require 'json'
-require 'active_support/inflector'
+# require 'active_support/inflector'
 require "cld"
+require "i18n"
 
 
 @blacklistCZ  = Highscore::Blacklist.load_file "stopwords/stopwords_cz.txt"
@@ -64,6 +66,8 @@ filename = ARGV[1] if ARGV[1]
 limit = 3
 limit = ARGV[0].to_i if ARGV[0]
 
+I18n.config.available_locales = :en
+
 def get_keywords(filename, limit)
 	file = File.read(filename)
 	corpus = JSON.parse(file)
@@ -75,7 +79,8 @@ def get_keywords(filename, limit)
 		#puts CLD.detect_language(text)[:code]
 
 		blacklist = what_blacklist(text)
-		text = text.parameterize.underscore.humanize
+		#text = text.parameterize.underscore.humanize
+		text = I18n.transliterate text.gsub(/[0-9!@%&.,?><\/}{()"#$\*]/,"")
 
 		keywords = count_keywords(text, blacklist)
 

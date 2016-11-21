@@ -2,8 +2,11 @@
 
 require './tfidf_lib/ruby-tf-idf'
 require 'json'
-require 'active_support/inflector'
+# require './activesupport-lib/active_support/inflector'
+# require './inflecto-lib/inflecto'
+# require 'active_support/inflector'
 require 'cld'
+
 
 filename = 'inputExample.json'
 filename = ARGV[1] if ARGV[1]
@@ -14,10 +17,11 @@ limit = ARGV[0].to_i if ARGV[0]
 def tfidf(filename, limit)
 	file = File.read(filename)
 	corpus = JSON.parse(file)
-	
-	corpus.map! {|text| text.parameterize.underscore.humanize} 
+	 
+    corpus.map! {|text| text.gsub(/[0-9\-!@%&.,?><\/}{()"#$\*]/,"")} 
+    #corpus.map! {|text| text.parameterize.underscore.humanize} 
+    #puts corpus[2]
 	exclude_stop_words = true
-
 	@t = RubyTfIdf::TfIdf.new(corpus, limit, exclude_stop_words)
 	output =  @t.tf_idf
 	i = 0;
@@ -34,3 +38,5 @@ def tfidf(filename, limit)
 end
 
 puts tfidf(filename, limit)
+
+
