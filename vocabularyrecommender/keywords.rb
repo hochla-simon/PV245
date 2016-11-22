@@ -7,7 +7,7 @@ require 'highscore'
 # require 'stemmer'
 require 'json'
 # require 'active_support/inflector'
-require "cld"
+# require "cld"
 require "i18n"
 
 
@@ -18,18 +18,19 @@ require "i18n"
 
 def whatLanguage txt 
 	if txt.include? 'sa'
-		:slovak
+		:sk
 	elsif txt.include? 'se'
-		:czech 
+		:cz
 	elsif txt.include? 'and'
-		:english 
+		:en
 	else
-		:english
+		:en
 	end
 end
 
 def what_blacklist(text)
-	case CLD.detect_language(text)[:code]
+	# case CLD.detect_language(text)[:code]
+	case whatLanguage(text)
 	when "cz"
 		return @blacklistCZ
 	when "sk"
@@ -87,7 +88,8 @@ def get_keywords(filename, limit)
 		output = Hash.new
 		keywords.top(limit).each do |k|		
 			#output[k.text] = k.weight.round(2) unless integer? k.text
-			output[k.text] = CLD.detect_language(text)[:code]
+			# output[k.text] = CLD.detect_language(text)[:code]
+			output[k.text] = whatLanguage(text)
 		end
 		array.push(output)
 	end

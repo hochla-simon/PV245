@@ -97,13 +97,13 @@
             <version>2.3</version>
             <scope>compile</scope>
         </dependency> 
-        <dependency>
+<!--        <dependency>
             <groupId>rubygems</groupId>
             <artifactId>cld</artifactId>
-            <version>0.7.0</version>
+            <version>0.5.0</version>
             <type>gem</type>
             <scope>provided</scope>
-        </dependency>
+        </dependency>-->
         <dependency>
             <groupId>rubygems</groupId>
             <artifactId>json</artifactId>
