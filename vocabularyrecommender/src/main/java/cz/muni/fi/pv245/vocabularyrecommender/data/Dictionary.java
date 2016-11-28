@@ -14,7 +14,12 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.net.ssl.HttpsURLConnection;
@@ -28,12 +33,61 @@ public class Dictionary {
     public static void main(String[] args) {
         //List<String> result = getSimilarWords("computer", 10); //TOTO FUNGUJE PARADNE
         //List<String> result = getSimilarWords("run", 10); // TOTO ZAFUNGUJE S PRVYM SYNONYMOM
-        List<String> result = getSimilarWords("write", 10); // A TOTO JE TAK TROSKU ODVECI VYSLEDOK :D
-        for (String s : result) {
-            System.out.println(s);
+        HashMap<String, String> map = getWordlistFor("computer", 10); // A TOTO JE TAK TROSKU ODVECI VYSLEDOK :D
+        Set set = map.entrySet();
+        Iterator iterator = set.iterator();
+        while(iterator.hasNext()) {
+            Map.Entry mentry = (Map.Entry)iterator.next();
+            System.out.print(mentry.getKey() + ": ");
+            System.out.println(mentry.getValue());
         }
     }
-
+      
+    public static HashMap getWordlistFor(String word, Integer limit) {
+        HashMap<String, String> map = new HashMap();
+        List<String> result = getSimilarWords("computer", limit*2); // A TOTO JE TAK TROSKU ODVECI VYSLEDOK :D
+        int counter = 0;
+        for (String s : result) {
+            String def = getDefinition(s);
+            if (def.length() > 0) {
+                map.put(s, def);
+                counter += 1;
+            }
+            if (counter == limit) {
+                break;
+            }
+        }
+        return map;
+    }
+    
+    private static String getDefinition(String word) {
+        String result;
+        result = getDefinitionUsing(word, true);
+        if (result.length() > 0) return result;
+        result = getDefinitionUsing(word, false);
+        return result;
+    }
+    
+    private static String getDefinitionUsing(String word, boolean ldoce5) {
+        String dict;
+        if (ldoce5) {
+            dict = "ldoce5";
+        } else {
+            dict = "wordwise";
+        }
+        URL url = null;
+        word = word.replaceAll(" ", "%20");
+        try {
+            url = new URL("https://api.pearson.com/v2/dictionaries/"+ dict +"/entries?search="+ word);
+        } catch (MalformedURLException ex) {
+        }
+        JsonObject obj = processPearsonRequest(url);
+        if (obj.get("results").getAsJsonArray().size() > 0) {
+            return obj.get("results").getAsJsonArray().get(0).getAsJsonObject().get("senses").getAsJsonArray().get(0).getAsJsonObject().get("definition").getAsString();
+        }
+        return "";
+    }
+    
     private static String getWordDomain(String word) {
         URL url = null;
         // get word domain
@@ -73,7 +127,7 @@ public class Dictionary {
         return result;
     }
     
-    public static List getSimilarWords(String word, Integer limit) {
+    private static List getSimilarWords(String word, Integer limit) {
         boolean domainFound = false;
         List<String> result;
         String domain = getWordDomain(word);
@@ -163,6 +217,30 @@ public class Dictionary {
             return root.getAsJsonObject();
         }
         catch (Exception e) {
+            return null;
+        }
+    }
+
+    private static JsonObject processPearsonRequest(URL url) {
+        try {
+            HttpsURLConnection urlConnection = (HttpsURLConnection) url.openConnection();
+            urlConnection.setRequestProperty("Accept","application/json");
+
+            // read the output from the server
+            BufferedReader reader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+            StringBuilder stringBuilder = new StringBuilder();
+
+            String line = null;
+            while ((line = reader.readLine()) != null) {
+                stringBuilder.append(line + "\n");
+            }
+
+            JsonParser jp = new JsonParser(); //from gson
+            JsonElement root = jp.parse(stringBuilder.toString());
+            return root.getAsJsonObject();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
             return null;
         }
     }
