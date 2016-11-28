@@ -28,6 +28,12 @@ def whatLanguage txt
 	end
 end
 
+def normalize str
+	str.tr(
+	"ÀÁÂÃÄÅàáâãäåĀāĂăĄąÇçĆćĈĉĊċČčÐðĎďĐđÈÉÊËèéêëĒēĔĕĖėĘęĚěĜĝĞğĠġĢģĤĥĦħÌÍÎÏìíîïĨĩĪīĬĭĮįİıĴĵĶķĸĹĺĻļĽľĿŀŁłÑñŃńŅņŇňŉŊŋÒÓÔÕÖØòóôõöøŌōŎŏŐőŔŕŖŗŘřŚśŜŝŞşŠšſŢţŤťŦŧÙÚÛÜùúûüŨũŪūŬŭŮůŰűŲųŴŵÝýÿŶŷŸŹźŻżŽž",
+	"AAAAAAaaaaaaAaAaAaCcCcCcCcCcDdDdDdEEEEeeeeEeEeEeEeEeGgGgGgGgHhHhIIIIiiiiIiIiIiIiIiJjKkkLlLlLlLlLlNnNnNnNnnNnOOOOOOooooooOoOoOoRrRrRrSsSsSsSssTtTtTtUUUUuuuuUuUuUuUuUuUuWwYyyYyYZzZzZz")
+end 
+
 def what_blacklist(text)
 	# case CLD.detect_language(text)[:code]
 	case whatLanguage(text)
@@ -64,7 +70,7 @@ end
 filename = 'inputExample.json'
 filename = ARGV[1] if ARGV[1]
 
-limit = 3
+limit = 1
 limit = ARGV[0].to_i if ARGV[0]
 
 I18n.config.available_locales = :en
@@ -76,20 +82,18 @@ def get_keywords(filename, limit)
 	array = []
 
 	corpus.each do |text|
-		
-		#puts CLD.detect_language(text)[:code]
 
 		blacklist = what_blacklist(text)
 		#text = text.parameterize.underscore.humanize
-		text = I18n.transliterate text.gsub(/[0-9!@%&.,?><\/}{()"#$\*]/,"")
-
+		# text = I18n.transliterate text.gsub(/[0-9!@%&.,?><\/}{()"#$\*]/,"")
+		text = normalize text.gsub(/[0-9!@%&.,?><\/}{()"#$\*]/,"")
 		keywords = count_keywords(text, blacklist)
 
 		output = Hash.new
 		keywords.top(limit).each do |k|		
-			#output[k.text] = k.weight.round(2) unless integer? k.text
 			# output[k.text] = CLD.detect_language(text)[:code]
 			output[k.text] = whatLanguage(text)
+			# p k.text.bytes
 		end
 		array.push(output)
 	end
@@ -98,5 +102,7 @@ def get_keywords(filename, limit)
 	File.open("keyword_output.json", 'w') { |file| file.write(json_str) }
 	return json_str
 end
+
+
 
 puts get_keywords(filename, limit)
