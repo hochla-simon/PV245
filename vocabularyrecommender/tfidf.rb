@@ -29,7 +29,7 @@ def tfidf(filename, limit)
 
 	corpus = JSON.parse(file)
 	 
-    corpus.map! {|text| text.gsub(/[0-9\-!@%&.,?><\/}{()"#$\*]/," ")} 
+    corpus.map! {|text| text.gsub(/[0-9\-!@%&.,?><\/}{(~)"#$\*]/," ")} 
 
 	exclude_stop_words = true
 	@t = RubyTfIdf::TfIdf.new(corpus, limit, exclude_stop_words)
