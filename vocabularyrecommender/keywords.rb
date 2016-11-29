@@ -70,7 +70,7 @@ def get_keywords(filename, limit)
 	corpus.each do |text|
 
 		blacklist = what_blacklist(text)
-		text = I18n.transliterate text.gsub(/[0-9!@%&.,?><\/}{(~)"#$\*]/," ")
+		text = I18n.transliterate text.gsub(/[0-9!@%&.,?><\/}{_(~)"#$\*]/," ")
 		keywords = count_keywords(text, blacklist)
 
 		output = Hash.new
