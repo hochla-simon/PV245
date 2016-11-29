@@ -4,7 +4,7 @@
 
 require './tfidf_lib/ruby-tf-idf'
 require 'json'
-require 'active_support/inflector'
+# require 'active_support/inflector'
 
 filename = 'inputExample.json'
 filename = ARGV[1] if ARGV[1]
