@@ -1,20 +1,15 @@
 #!/usr/bin/env ruby
+# encoding: UTF-8
 
-# require 'rake_text'
-require 'rubygems'
+# require 'rubygems'
 require 'highscore'
-# require 'bloomfilter-rb'
-# require 'stemmer'
 require 'json'
-# require 'active_support/inflector'
-# require "cld"
 require "i18n"
 
 
 @blacklistCZ  = Highscore::Blacklist.load_file "stopwords/stopwords_cz.txt"
 @blacklistENG = Highscore::Blacklist.load_file "stopwords/stopwords_en.txt"
 @blacklistSK  = Highscore::Blacklist.load_file "stopwords/stopwords_sk.txt"
-#blacklistUniversal = Highscore::Blacklist.load_file "stopwords/stopwords.txt"
 
 def whatLanguage txt 
 	if txt.include? 'sa'
@@ -28,11 +23,6 @@ def whatLanguage txt
 	end
 end
 
-def normalize str
-	str.tr(
-	"ÀÁÂÃÄÅàáâãäåĀāĂăĄąÇçĆćĈĉĊċČčÐðĎďĐđÈÉÊËèéêëĒēĔĕĖėĘęĚěĜĝĞğĠġĢģĤĥĦħÌÍÎÏìíîïĨĩĪīĬĭĮįİıĴĵĶķĸĹĺĻļĽľĿŀŁłÑñŃńŅņŇňŉŊŋÒÓÔÕÖØòóôõöøŌōŎŏŐőŔŕŖŗŘřŚśŜŝŞşŠšſŢţŤťŦŧÙÚÛÜùúûüŨũŪūŬŭŮůŰűŲųŴŵÝýÿŶŷŸŹźŻżŽž",
-	"AAAAAAaaaaaaAaAaAaCcCcCcCcCcDdDdDdEEEEeeeeEeEeEeEeEeGgGgGgGgHhHhIIIIiiiiIiIiIiIiIiJjKkkLlLlLlLlLlNnNnNnNnnNnOOOOOOooooooOoOoOoRrRrRrSsSsSsSssTtTtTtUUUUuuuuUuUuUuUuUuUuWwYyyYyYZzZzZz")
-end 
 
 def what_blacklist(text)
 	# case CLD.detect_language(text)[:code]
@@ -44,10 +34,6 @@ def what_blacklist(text)
 	else
 		return @blacklistENG
 	end
-end
-
-def integer?(str)
-  /[+-]?\d+/ === str
 end
 
 def count_keywords(text, blacklist)
@@ -70,13 +56,13 @@ end
 filename = 'inputExample.json'
 filename = ARGV[1] if ARGV[1]
 
-limit = 1
+limit = 3
 limit = ARGV[0].to_i if ARGV[0]
 
 I18n.config.available_locales = :en
 
 def get_keywords(filename, limit)
-	file = File.read(filename)
+	file = File.read(filename,:encoding => "utf-8")
 	corpus = JSON.parse(file)
 
 	array = []
@@ -84,16 +70,12 @@ def get_keywords(filename, limit)
 	corpus.each do |text|
 
 		blacklist = what_blacklist(text)
-		#text = text.parameterize.underscore.humanize
-		# text = I18n.transliterate text.gsub(/[0-9!@%&.,?><\/}{()"#$\*]/,"")
-		text = normalize text.gsub(/[0-9!@%&.,?><\/}{()"#$\*]/,"")
+		text = I18n.transliterate text.gsub(/[0-9!@%&.,?><\/}{()"#$\*]/," ")
 		keywords = count_keywords(text, blacklist)
 
 		output = Hash.new
 		keywords.top(limit).each do |k|		
-			# output[k.text] = CLD.detect_language(text)[:code]
 			output[k.text] = whatLanguage(text)
-			# p k.text.bytes
 		end
 		array.push(output)
 	end

@@ -24,7 +24,7 @@ public class KeywordsTest extends TestCase {
         System.out.println("keywordsTest");
         int limit = 1;
         String filename = "inputExample.json";
-        String expResult = "[{\"rieseni\":\"sk\"},{\"bird\":\"en\"},{\"bird\":\"en\"},{\"career\":\"en\"},{\"desk\":\"en\"},{\"cynic\":\"en\"}]";
+        String expResult = "[{\"rieseni\":\"sk\"},{\"bird\":\"en\"},{\"hand\":\"en\"},{\"career\":\"en\"},{\"desk\":\"en\"},{\"smell\":\"en\"}]";
         
         String result = Keywords.getKeywords(limit, filename);
         //System.out.println(result);

@@ -1,10 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rake'
 gem 'highscore'
 gem 'json'
 gem 'i18n'
-# gem 'bloomfilter-rb'
-# gem 'stemmer'
-# gem 'cld'
-# gem 'ruby-tf-idf'
+

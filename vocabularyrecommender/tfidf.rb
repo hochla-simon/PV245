@@ -1,13 +1,15 @@
 #!/usr/bin/env ruby
+# encoding: UTF-8
+# coding: UTF-8
 
 require './tfidf_lib/ruby-tf-idf'
 require 'json'
-
+require 'active_support/inflector'
 
 filename = 'inputExample.json'
 filename = ARGV[1] if ARGV[1]
 
-limit = 1 #restrict to the top 3 relevant words per document
+limit = 3 #restrict to the top 3 relevant words per document
 limit = ARGV[0].to_i if ARGV[0]
 
 def whatLanguage txt 
@@ -22,20 +24,12 @@ def whatLanguage txt
 	end
 end
 
-def normalize str
-	str.tr(
-	"ÀÁÂÃÄÅàáâãäåĀāĂăĄąÇçĆćĈĉĊċČčÐðĎďĐđÈÉÊËèéêëĒēĔĕĖėĘęĚěĜĝĞğĠġĢģĤĥĦħÌÍÎÏìíîïĨĩĪīĬĭĮįİıĴĵĶķĸĹĺĻļĽľĿŀŁłÑñŃńŅņŇňŉŊŋÒÓÔÕÖØòóôõöøŌōŎŏŐőŔŕŖŗŘřŚśŜŝŞşŠšſŢţŤťŦŧÙÚÛÜùúûüŨũŪūŬŭŮůŰűŲųŴŵÝýÿŶŷŸŹźŻżŽž",
-	"AAAAAAaaaaaaAaAaAaCcCcCcCcCcDdDdDdEEEEeeeeEeEeEeEeEeGgGgGgGgHhHhIIIIiiiiIiIiIiIiIiJjKkkLlLlLlLlLlNnNnNnNnnNnOOOOOOooooooOoOoOoRrRrRrSsSsSsSssTtTtTtUUUUuuuuUuUuUuUuUuUuWwYyyYyYZzZzZz")
-end 
-
 def tfidf(filename, limit)
-	file = File.read(filename)
+	file = File.read(filename,:encoding => "utf-8")
+
 	corpus = JSON.parse(file)
 	 
-    corpus.map! {|text| text.gsub(/[0-9\-!@%&.,?><\/}{()"#$\*]/,"")} 
-    corpus.map! {|text| normalize text} 
-    #corpus.map! {|text| text.parameterize.underscore.humanize} 
-
+    corpus.map! {|text| text.gsub(/[0-9\-!@%&.,?><\/}{()"#$\*]/," ")} 
 
 	exclude_stop_words = true
 	@t = RubyTfIdf::TfIdf.new(corpus, limit, exclude_stop_words)
@@ -44,7 +38,6 @@ def tfidf(filename, limit)
 	output.each do |my_hash|
 
 		my_hash.each { |k, v| my_hash[k] = whatLanguage corpus[i] }
-		# my_hash.each { |k, v| my_hash[k] = CLD.detect_language(corpus[i])[:code] }
 		i += 1
 	end 
 
