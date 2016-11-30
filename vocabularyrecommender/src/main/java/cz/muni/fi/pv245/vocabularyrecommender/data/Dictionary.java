@@ -14,35 +14,52 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.net.ssl.HttpsURLConnection;
-import org.json.simple.JSONArray;
-
+import com.google.cloud.translate.Translate;
+import com.google.cloud.translate.Translate.TranslateOption;
+import com.google.cloud.translate.TranslateOptions;
+import com.google.cloud.translate.Translation;
 /**
  *
  * @author Daniel
  */
 public class Dictionary {
     public static void main(String[] args) {
+        translateText("stretnutie", "sk");
         //List<String> result = getSimilarWords("computer", 10); //TOTO FUNGUJE PARADNE
         //List<String> result = getSimilarWords("run", 10); // TOTO ZAFUNGUJE S PRVYM SYNONYMOM
-        HashMap<String, String> map = getWordlistFor("computer", 10); // A TOTO JE TAK TROSKU ODVECI VYSLEDOK :D
-        Set set = map.entrySet();
-        Iterator iterator = set.iterator();
-        while(iterator.hasNext()) {
-            Map.Entry mentry = (Map.Entry)iterator.next();
-            System.out.print(mentry.getKey() + ": ");
-            System.out.println(mentry.getValue());
-        }
+//        HashMap<String, String> map = getWordlistFor("computer", 10); // A TOTO JE TAK TROSKU ODVECI VYSLEDOK :D
+//        Set set = map.entrySet();
+//        Iterator iterator = set.iterator();
+//        while(iterator.hasNext()) {
+//            Map.Entry mentry = (Map.Entry)iterator.next();
+//            System.out.print(mentry.getKey() + ": ");
+//            System.out.println(mentry.getValue());
+//        }
     }
-      
+
+    private static String translateText(String text, String lang) {
+        // Instantiates a client
+        Translate translate =
+            TranslateOptions.builder()
+                .apiKey("AIzaSyBrH7yIvjTuRroBowNuKIPk4umHZRAWO_E")
+                .build()
+                .service();
+        // Translates some text into Russian
+        Translation translation =
+            translate.translate(
+                text,
+                TranslateOption.sourceLanguage(lang),
+                TranslateOption.targetLanguage("en"));
+        System.out.printf("Translation: %s -> %s%n", text, translation.translatedText());
+        return translation.translatedText();
+    }
+    
     public static HashMap getWordlistFor(String word, Integer limit) {
         HashMap<String, String> map = new HashMap();
         List<String> result = getSimilarWords("computer", limit*2); // A TOTO JE TAK TROSKU ODVECI VYSLEDOK :D
