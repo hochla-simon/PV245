@@ -15,7 +15,7 @@ def whatLanguage txt
 	if txt.include? 'sa'
 		:sk
 	elsif txt.include? 'se'
-		:cz
+		:cs
 	elsif txt.include? 'and'
 		:en
 	else
@@ -27,7 +27,7 @@ end
 def what_blacklist(text)
 	# case CLD.detect_language(text)[:code]
 	case whatLanguage(text)
-	when "cz"
+	when "cs"
 		return @blacklistCZ
 	when "sk"
 		return @blacklistSK

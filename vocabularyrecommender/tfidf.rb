@@ -16,7 +16,7 @@ def whatLanguage txt
 	if txt.include? 'sa'
 		:sk
 	elsif txt.include? 'se'
-		:cz
+		:cs
 	elsif txt.include? 'and'
 		:en
 	else
