@@ -63,24 +63,29 @@ I18n.config.available_locales = :en
 
 def get_keywords(filename, limit)
 	file = File.read(filename,:encoding => "utf-8")
-	corpus = JSON.parse(file)
+    texts = JSON.parse(file)
 
-	array = []
+	corpus =  Array.new
+	texts.each { |event|
+		corpus << event.values[0] }
 
+	final = []
+	i = 0
 	corpus.each do |text|
 
 		blacklist = what_blacklist(text)
 		text = I18n.transliterate text.gsub(/[0-9!@%&.,?><\/}{_(~)"#$\*]/," ")
 		keywords = count_keywords(text, blacklist)
 
-		output = Hash.new
-		keywords.top(limit).each do |k|		
-			output[k.text] = whatLanguage(text)
-		end
-		array.push(output)
+		pom = Hash.new
+		pom[:event_name] = texts[i].keys[0];
+		pom[:language] = whatLanguage text
+		pom[:words] = keywords.top(limit)
+
+		final << pom
 	end
 
-	json_str = array.to_json
+	json_str = final.to_json
 	File.open("keyword_output.json", 'w') { |file| file.write(json_str) }
 	return json_str
 end
