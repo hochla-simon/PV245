@@ -3,10 +3,12 @@
 <html>
 <body>
 <div>Welcome <c:out value="${details.name}"/></div>
-<a href="/RecommendEvents"> Recommend vocabulary based on events </a>
+Recommend vocabulary based on:
 <br>
-<a href="/RecommendFeed"> Recommend vocabulary based onfeed </a>
+<a href="/RecommendEvents"> Events</a>
 <br>
-<a href="/RecommendPagesFeed"> Recommend vocabulary based on pages feed </a>
+<a href="/RecommendFeed"> Feed</a>
+<br>
+<a href="/RecommendPagesFeed"> Pages feed</a>
 </body>
 </html>
