@@ -11,7 +11,66 @@
 
     <servlet-mapping>
         <servlet-name>MainMenu</servlet-name>
-        <url-pattern>/fbhome</url-pattern>
+        <url-pattern>/MainMenu</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+    <servlet-name>Complete</servlet-name>
+    <servlet-class>cz.muni.fi.pv245.vocabularyrecommender.web.Complete</servlet-class>
+</servlet>
+
+    <servlet-mapping>
+        <servlet-name>Complete</servlet-name>
+        <url-pattern>/Complete</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>Practising</servlet-name>
+        <servlet-class>cz.muni.fi.pv245.vocabularyrecommender.web.Practising</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>Practising</servlet-name>
+        <url-pattern>/Practising</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>RecommendEvents</servlet-name>
+        <servlet-class>cz.muni.fi.pv245.vocabularyrecommender.web.RecommendEvents</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>RecommendEvents</servlet-name>
+        <url-pattern>/RecommendEvents</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>RecommendFeed</servlet-name>
+        <servlet-class>cz.muni.fi.pv245.vocabularyrecommender.web.RecommendFeed</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>RecommendFeed</servlet-name>
+        <url-pattern>/RecommendFeed</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>RecommendPagesFeed</servlet-name>
+        <servlet-class>cz.muni.fi.pv245.vocabularyrecommender.web.RecommendPagesFeed</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>RecommendPagesFeed</servlet-name>
+        <url-pattern>/RecommendPagesFeed</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>WordsOverview</servlet-name>
+        <servlet-class>cz.muni.fi.pv245.vocabularyrecommender.web.WordsOverview</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>WordsOverview</servlet-name>
+        <url-pattern>/WordsOverview</url-pattern>
+    </servlet-mapping>
 </web-app>

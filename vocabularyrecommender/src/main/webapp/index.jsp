@@ -11,6 +11,10 @@
     <title>Java Facebook Login</title>
 </head>
 <body style="text-align: center; margin: 0 auto;">
+<div>
+    <h1>Welcome to Vocabulary recommender</h1>
+    <h2>Customized way to learn vocabulary. You are provided new words based on the content of your FB account.</h2>
+</div>
 <div
         style="margin: 0 auto; background-image: url(./img/fbloginbckgrnd.jpg); height: 360px; width: 610px;">
     <a href="<%=fbConnection.getFBAuthUrl()%>"> <img
