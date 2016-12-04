@@ -15,22 +15,70 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 import javax.net.ssl.HttpsURLConnection;
 import com.google.cloud.translate.Translate;
 import com.google.cloud.translate.Translate.TranslateOption;
 import com.google.cloud.translate.TranslateOptions;
 import com.google.cloud.translate.Translation;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.Iterator;
+import java.util.Map;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 /**
- *
+ * The main task of this class is to read the input json file, go through all obtained words and 
+ * find for them vocabulary with explanations
  * @author Daniel
- */
+ * 
+    Example of input json file:
+    [{"event_name":"nazov1","language":"sk","words":["rok","riešenie","ministerstvo"]},
+     {"event_name":"nazov2","language":"en","words":["big","mistake","bird"]},
+    ]
+
+    Example of output structure:
+    {"nazov1": {"rok":          {"slovo1": "vysvetlenie1",
+                                 "slovo2": "vysvetlenie2",
+                                 "slovo3": "vysvetlenie3"}
+                "riesenie":     {"slovo1": "vysvetlenie1",
+                                 "slovo2": "vysvetlenie2",
+                                 "slovo3": "vysvetlenie3"}
+                "ministerstvo": {"slovo1": "vysvetlenie1",
+                                 "slovo3": "vysvetlenie3"}
+                },
+     "nazov2": {"big":          {"slovo1": "vysvetlenie1",
+                                 "slovo2": "vysvetlenie2",
+                                 "slovo3": "vysvetlenie3"}
+                "mistake":      {"slovo1": "vysvetlenie1",
+                                 "slovo2": "vysvetlenie2",
+                                 "slovo3": "vysvetlenie3"}
+                "bird":         {"slovo1": "vysvetlenie1",
+                                 "slovo3": "vysvetlenie3"}
+                }
+    }
+*/
 public class Dictionary {
-    public static void main(String[] args) {
-        translateText("stretnutie", "sk");
+    public static void main(String[] args) throws IOException, ParseException {
+        HashMap<String, HashMap<String, HashMap<String, String>>> result = new HashMap();
+        result = getFinalVocabulary("d:\\school\\MUNI\\podzim2016\\recsys\\PV245-vocabulary_recommender\\vocabularyrecommender\\tfidf_output.json", 10);
+        System.out.println("======================================================================");
+        for (Map.Entry<String, HashMap<String, HashMap<String, String>>> entry : result.entrySet()) {
+            System.out.println("Event name: " + entry.getKey());
+            HashMap<String, HashMap<String, String>> wordSets = entry.getValue();
+            for (Map.Entry<String, HashMap<String, String>> wordSetEntry : wordSets.entrySet()) {
+                System.out.println("Source word: " + wordSetEntry.getKey());
+                HashMap<String, String> words = wordSetEntry.getValue();
+                for (Map.Entry<String, String> wordEntry : words.entrySet()) {
+                    System.out.println(wordEntry.getKey() + ": " + wordEntry.getValue());
+                }
+            }
+        }
+        //translateText("stretnutie", "sk");
         //List<String> result = getSimilarWords("computer", 10); //TOTO FUNGUJE PARADNE
         //List<String> result = getSimilarWords("run", 10); // TOTO ZAFUNGUJE S PRVYM SYNONYMOM
 //        HashMap<String, String> map = getWordlistFor("computer", 10); // A TOTO JE TAK TROSKU ODVECI VYSLEDOK :D
@@ -43,6 +91,38 @@ public class Dictionary {
 //        }
     }
 
+    public static HashMap getFinalVocabulary(String path, Integer limit) {
+        JSONParser parser = new JSONParser();
+        HashMap<String, HashMap<String, HashMap<String, String>>> eventsMap = new HashMap();
+        try {
+            JSONArray events = (JSONArray) parser.parse(new InputStreamReader(new FileInputStream(path), "UTF-8"));
+            // processing json file
+            for (int i=0; i<events.size(); i++) {
+                JSONObject event = (JSONObject) events.get(i);
+                JSONArray words = (JSONArray) event.get("words");
+                String eventName = event.get("event_name").toString();
+                String eventLang = event.get("language").toString();
+                System.out.println(eventName + " | " + eventLang);
+                HashMap<String, HashMap<String, String>> wordsMap = new HashMap();
+                for (int j=0; j<words.size(); j++) {
+                    String word = words.get(j).toString();
+                    System.out.println("Getting hashmap for: " + word);
+                    HashMap<String, String> newWordsMap = getWordlistFor(word, limit);
+                    wordsMap.put(word, newWordsMap);
+                }
+                eventsMap.put(eventName, wordsMap);
+            }
+
+        } catch (FileNotFoundException e) {
+                e.printStackTrace();
+        } catch (IOException e) {
+                e.printStackTrace();
+        } catch (ParseException e) {
+                e.printStackTrace();
+        }   
+        return eventsMap;
+    }
+    
     private static String translateText(String text, String lang) {
         // Instantiates a client
         Translate translate =
@@ -62,7 +142,7 @@ public class Dictionary {
     
     public static HashMap getWordlistFor(String word, Integer limit) {
         HashMap<String, String> map = new HashMap();
-        List<String> result = getSimilarWords("computer", limit*2); // A TOTO JE TAK TROSKU ODVECI VYSLEDOK :D
+        List<String> result = getSimilarWords(word, limit*2); // A TOTO JE TAK TROSKU ODVECI VYSLEDOK :D
         int counter = 0;
         for (String s : result) {
             String def = getDefinition(s);
@@ -99,8 +179,12 @@ public class Dictionary {
         } catch (MalformedURLException ex) {
         }
         JsonObject obj = processPearsonRequest(url);
-        if (obj.get("results").getAsJsonArray().size() > 0) {
-            return obj.get("results").getAsJsonArray().get(0).getAsJsonObject().get("senses").getAsJsonArray().get(0).getAsJsonObject().get("definition").getAsString();
+        try {
+            if (obj.get("results").getAsJsonArray().size() > 0) {
+                return obj.get("results").getAsJsonArray().get(0).getAsJsonObject().get("senses").getAsJsonArray().get(0).getAsJsonObject().get("definition").getAsString();
+            }
+        } catch (Exception e) {
+            System.out.println("Definition for word " + word + " not available.");
         }
         return "";
     }
