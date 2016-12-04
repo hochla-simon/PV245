@@ -5,37 +5,34 @@
  */
 package cz.muni.fi.pv245.vocabularyrecommender.data;
 
+import com.google.cloud.translate.Translate;
+import com.google.cloud.translate.Translate.TranslateOption;
+import com.google.cloud.translate.TranslateOptions;
+import com.google.cloud.translate.Translation;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+
+import javax.net.ssl.HttpsURLConnection;
+import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import javax.net.ssl.HttpsURLConnection;
-import com.google.cloud.translate.Translate;
-import com.google.cloud.translate.Translate.TranslateOption;
-import com.google.cloud.translate.TranslateOptions;
-import com.google.cloud.translate.Translation;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.Map;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 /**
  * The main task of this class is to read the input json file, go through all obtained words and 
  * find for them vocabulary with explanations
  * @author Daniel
  * 
     Example of input json file:
-    [{"event_name":"nazov1","language":"sk","words":["rok","riešenie","ministerstvo"]},
+    [{"event_name":"nazov1","language":"sk","words":["rok","rie¹enie","ministerstvo"]},
      {"event_name":"nazov2","language":"en","words":["big","mistake","bird"]},
     ]
 
@@ -164,7 +161,7 @@ public class Dictionary {
         return result;
     }
     
-    private static String getDefinitionUsing(String word, boolean ldoce5) {
+    public static String getDefinitionUsing(String word, boolean ldoce5) {
         String dict;
         if (ldoce5) {
             dict = "ldoce5";
