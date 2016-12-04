@@ -64,6 +64,7 @@ import org.json.simple.parser.ParseException;
 */
 public class Dictionary {
     public static void main(String[] args) throws IOException, ParseException {
+        // this is the example how to call getFinalVocabulary an process result
         HashMap<String, HashMap<String, HashMap<String, String>>> result = new HashMap();
         result = getFinalVocabulary("d:\\school\\MUNI\\podzim2016\\recsys\\PV245-vocabulary_recommender\\vocabularyrecommender\\tfidf_output.json", 10);
         System.out.println("======================================================================");
