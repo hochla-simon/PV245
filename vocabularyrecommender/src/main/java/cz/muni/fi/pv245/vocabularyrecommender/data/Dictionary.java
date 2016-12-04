@@ -5,25 +5,23 @@
  */
 package cz.muni.fi.pv245.vocabularyrecommender.data;
 
+import com.google.cloud.translate.Translate;
+import com.google.cloud.translate.Translate.TranslateOption;
+import com.google.cloud.translate.TranslateOptions;
+import com.google.cloud.translate.Translation;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+
+import javax.net.ssl.HttpsURLConnection;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import javax.net.ssl.HttpsURLConnection;
-import com.google.cloud.translate.Translate;
-import com.google.cloud.translate.Translate.TranslateOption;
-import com.google.cloud.translate.TranslateOptions;
-import com.google.cloud.translate.Translation;
 /**
  *
  * @author Daniel
@@ -62,7 +60,7 @@ public class Dictionary {
     
     public static HashMap getWordlistFor(String word, Integer limit) {
         HashMap<String, String> map = new HashMap();
-        List<String> result = getSimilarWords("computer", limit*2); // A TOTO JE TAK TROSKU ODVECI VYSLEDOK :D
+        List<String> result = getSimilarWords(word, limit*2);
         int counter = 0;
         for (String s : result) {
             String def = getDefinition(s);
@@ -85,7 +83,7 @@ public class Dictionary {
         return result;
     }
     
-    private static String getDefinitionUsing(String word, boolean ldoce5) {
+    public static String getDefinitionUsing(String word, boolean ldoce5) {
         String dict;
         if (ldoce5) {
             dict = "ldoce5";

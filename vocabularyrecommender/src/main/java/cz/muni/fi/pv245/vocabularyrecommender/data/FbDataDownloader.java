@@ -5,27 +5,18 @@
  */
 package cz.muni.fi.pv245.vocabularyrecommender.data;
 
-import java.io.IOException;
 import com.restfb.DefaultFacebookClient;
 import com.restfb.FacebookClient;
 import com.restfb.Parameter;
-import com.restfb.types.User;
 import com.restfb.Version;
 import com.restfb.exception.FacebookOAuthException;
 import com.restfb.json.JsonObject;
-import com.restfb.json.JsonArray;
-import java.io.BufferedWriter;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.OutputStreamWriter;
-import java.io.UnsupportedEncodingException;
-import java.io.Writer;
-import java.net.MalformedURLException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import com.restfb.types.User;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+
+import java.io.*;
+import java.net.MalformedURLException;
  
 /**
  *
@@ -34,7 +25,8 @@ import org.json.simple.JSONObject;
 public class FbDataDownloader {
     
     public static void main(String[] args) throws IOException, MalformedURLException {
-        String MY_ACCESS_TOKEN = "EAACEdEose0cBAGJmOGmDRZAQAq1ZBNqGaIGHM3z0ZBa6d46p2foMzBxZCSZBx0GrE45wxBZAJIo2USsczTyc1kyvgXkvmh0aA8yhY2FGBX3bpLEJMpZCn1d3z6oCmH3dMkY27K7aTZAyD1pWEkAHSnsdaAIoKoL7MmS8T6rA9b4jwwZDZD";
+        String MY_ACCESS_TOKEN = "EAACEdEose0cBAGJmOGmDRZAQAq1ZBNqGaIGHM3z0ZBa6d46p2foMzBxZCSZBx0GrE45wxBZAJIo2US" +
+                "sczTyc1kyvgXkvmh0aA8yhY2FGBX3bpLEJMpZCn1d3z6oCmH3dMkY27K7aTZAyD1pWEkAHSnsdaAIoKoL7MmS8T6rA9b4jwwZDZD";
         downloadFbData(MY_ACCESS_TOKEN);
     }  
     

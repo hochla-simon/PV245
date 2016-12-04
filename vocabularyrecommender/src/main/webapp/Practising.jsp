@@ -1,3 +1,4 @@
+<%@ page import="org.json.JSONArray" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -16,8 +17,8 @@
 <input type="button" name="answer" value="Show meaning" onclick="javascript:showDiv();"/>
 
 <form action="${pageContext.request.contextPath}/practising" method="post">
-    <input type="submit" name="button1" value="Yes, I knew"/>
-    <input type="submit" name="button2" value="Oops, I was wrong"/>
+    <input type="submit" name="Yes, I knew" value="Yes, I knew"/>
+    <input type="submit" name="Oops, I was wrong" value="Oops, I was wrong"/>
 </form>
 
 </body>
