@@ -1,3 +1,4 @@
+<%@page import="cz.muni.fi.pv245.vocabularyrecommender.data.Keywords"%>
 <%@page import="cz.muni.fi.pv245.vocabularyrecommender.data.TfIdf"%>
 <%@page import="cz.muni.fi.pv245.vocabularyrecommender.data.FbDataDownloader"%>
 <%@page import="cz.muni.fi.pv245.vocabularyrecommender.web.FBConnection"%>
@@ -9,15 +10,7 @@
 <%@ page import="java.util.Map" %>
 <%@ page import="java.util.HashMap" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%
-    String code = request.getParameter("code");
-    FBConnection fbconn = new FBConnection();
-    String tokenString = fbconn.getAccessToken(code);
-    String[] values = tokenString.split("&");
-    String[] token = values[0].split("=");
-    FbDataDownloader.downloadFbData(token[1]);
 
-%>
 <html>
 <head>
     <title>Vocabulary by FB events</title>
@@ -26,8 +19,9 @@
 <h1>Recommended sets of Words</h1>
 
 <%
-    String path = System.getProperty("user.dir");
-    String jsonStr = TfIdf.getTfidf(3, path + "\\events.json");
+    ServletContext ctx = getServletContext();
+    String jsonStr = TfIdf.getTfidf(3, "events.json", ctx.getResource("/WEB-INF/tfidf.rb").getPath() );
+//    String jsonStr = Keywords.getKeywords(3, "events.json", ctx.getResource("/WEB-INF/keywords.rb").getPath() );
 %>
 
 <%

@@ -1,6 +1,7 @@
 package cz.muni.fi.pv245.vocabularyrecommender.data;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
@@ -14,15 +15,25 @@ import java.io.InputStreamReader;
  */
 public class Keywords {
 
-    public static String getKeywords(int limit, String filename) {
+    public static String getKeywords(int limit, String filename, String scripname) {
         String line = "";
 
         try {
             String[] argv = new String[4];
             argv[0] = "ruby";
-            argv[1] = "keywords.rb";
+            argv[1] = scripname;
             argv[2] = "" + limit;
             argv[3] = filename;
+
+            File f = new File(argv[1]);
+            if (!f.exists()) {
+                throw new RuntimeException("File keywords.rb could not be find!!!!!");
+            }
+
+            f = new File(argv[3]);
+            if (!f.exists()) {
+                throw new RuntimeException("File " + argv[3] + " could not be find!!!!!");
+            }
 
             Process process = Runtime.getRuntime().exec(argv);
             process.waitFor();
@@ -31,6 +42,7 @@ public class Keywords {
                     new InputStreamReader(process.getInputStream()));
 
             line = processIn.readLine();
+            System.out.println("Keywords output: " + line);
         } catch (Exception e) {
             e.printStackTrace();
         }
