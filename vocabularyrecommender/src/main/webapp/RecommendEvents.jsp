@@ -1,3 +1,4 @@
+<%@page import="cz.muni.fi.pv245.vocabularyrecommender.data.TfIdf"%>
 <%@page import="cz.muni.fi.pv245.vocabularyrecommender.data.FbDataDownloader"%>
 <%@page import="cz.muni.fi.pv245.vocabularyrecommender.web.FBConnection"%>
 <%@page import="cz.muni.fi.pv245.vocabularyrecommender.web.RecommendEvents"%>
@@ -25,7 +26,8 @@
 <h1>Recommended sets of Words</h1>
 
 <%
-    String jsonStr = RecommendEvents.readFile("d:\\school\\MUNI\\podzim2016\\recsys\\PV245-vocabulary_recommender\\vocabularyrecommender\\tfidf_output.json");
+    String path = System.getProperty("user.dir");
+    String jsonStr = TfIdf.getTfidf(3, path + "\\events.json");
 %>
 
 <%
