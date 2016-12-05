@@ -33,7 +33,7 @@ def tfidf(filename, limit)
 	texts.each { |event|
 		corpus << event.values[0] }
 
-    corpus.map! {|text| text.gsub(/[0-9\-!@%&.,?><\/}{(~_)"#$\*]/," ")} 
+    corpus.map! {|text| text.gsub(/[0-9\-–★:!@%&.,?><\/}{(~_)"#$\*]/," ")} 
     
 	exclude_stop_words = true
 	@t = RubyTfIdf::TfIdf.new(corpus, limit, exclude_stop_words)
