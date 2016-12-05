@@ -1,4 +1,4 @@
-/*
+﻿/*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
@@ -24,15 +24,18 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.TimeUnit;
 /**
  * The main task of this class is to read the input json file, go through all obtained words and 
  * find for them vocabulary with explanations
  * @author Daniel
  * 
     Example of input json file:
-    [{"event_name":"nazov1","language":"sk","words":["rok","rie�enie","ministerstvo"]},
+    [{"event_name":"nazov1","language":"sk","words":["rok","rieąenie","ministerstvo"]},
      {"event_name":"nazov2","language":"en","words":["big","mistake","bird"]},
     ]
 
@@ -58,10 +61,13 @@ import java.util.Map;
     }
 */
 public class Dictionary {
+    
+    static int requestCount = 0;
+    
     public static void main(String[] args) throws IOException, ParseException {
         // this is the example how to call getFinalVocabulary an process result
         HashMap<String, HashMap<String, HashMap<String, String>>> result = new HashMap();
-        result = getFinalVocabulary("d:\\school\\MUNI\\podzim2016\\recsys\\PV245-vocabulary_recommender\\vocabularyrecommender\\tfidf_output.json", 10);
+        result = getFinalVocabulary("d:\\school\\MUNI\\podzim2016\\recsys\\PV245-vocabulary_recommender\\vocabularyrecommender\\tfidf_output.json", 5);
         System.out.println("======================================================================");
         for (Map.Entry<String, HashMap<String, HashMap<String, String>>> entry : result.entrySet()) {
             System.out.println("Event name: " + entry.getKey());
@@ -75,9 +81,9 @@ public class Dictionary {
             }
         }
         //translateText("stretnutie", "sk");
-        //List<String> result = getSimilarWords("computer", 10); //TOTO FUNGUJE PARADNE
-        //List<String> result = getSimilarWords("run", 10); // TOTO ZAFUNGUJE S PRVYM SYNONYMOM
-//        HashMap<String, String> map = getWordlistFor("computer", 10); // A TOTO JE TAK TROSKU ODVECI VYSLEDOK :D
+        //List<String> result = getSimilarWords("computer", 10);
+        //List<String> result = getSimilarWords("run", 10);
+//        HashMap<String, String> map = getWordlistFor("bird", 10);
 //        Set set = map.entrySet();
 //        Iterator iterator = set.iterator();
 //        while(iterator.hasNext()) {
@@ -102,6 +108,9 @@ public class Dictionary {
                 HashMap<String, HashMap<String, String>> wordsMap = new HashMap();
                 for (int j=0; j<words.size(); j++) {
                     String word = words.get(j).toString();
+                    if (!eventLang.equals("en")) {
+                        word = translateText(word, eventLang);
+                    }
                     System.out.println("Getting hashmap for: " + word);
                     HashMap<String, String> newWordsMap = getWordlistFor(word, limit);
                     wordsMap.put(word, newWordsMap);
@@ -138,7 +147,7 @@ public class Dictionary {
     
     public static HashMap getWordlistFor(String word, Integer limit) {
         HashMap<String, String> map = new HashMap();
-        List<String> result = getSimilarWords(word, limit*2); // A TOTO JE TAK TROSKU ODVECI VYSLEDOK :D
+        List<String> result = getSimilarWords(word, limit*2);
         int counter = 0;
         for (String s : result) {
             String def = getDefinition(s);
@@ -258,6 +267,7 @@ public class Dictionary {
             url = new URL("https://od-api.oxforddictionaries.com:443/api/v1/wordlist/en/domains%3D" + domain);
         } catch (MalformedURLException ex) {
         }
+        System.out.println("Getting words for domain: " + domain);
         List<String> result = new ArrayList<>();
         JsonObject obj = processRequest(url);
         for (int i=0; i<obj.get("results").getAsJsonArray().size(); i++) {
@@ -285,13 +295,24 @@ public class Dictionary {
         }
         List<String> result = new ArrayList<>();
         JsonObject obj = processRequest(url);
-        for (int i=0; i<obj.get("results").getAsJsonArray().size(); i++) {
-            result.add(obj.get("results").getAsJsonArray().get(i).getAsJsonObject().get("word").getAsString());
+        try {
+            for (int i=0; i<obj.get("results").getAsJsonArray().size(); i++) {
+                result.add(obj.get("results").getAsJsonArray().get(i).getAsJsonObject().get("word").getAsString());
+            }
+        } catch (Exception e) {
+            System.out.println("There are no words with the same base.");
         }
         return result;
     }
     
     private static JsonObject processRequest(URL url) {
+        try {
+            if (requestCount > 55) {
+                System.out.println("Waiting 30s...");
+                TimeUnit.SECONDS.sleep(30);
+                requestCount = 0;
+            }
+        } catch (Exception e) {}
         final String app_id = "4335cf05";
         final String app_key = "9035da7c9722e552b82062e6a3e95cea";
         try {

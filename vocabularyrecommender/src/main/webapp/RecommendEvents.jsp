@@ -25,12 +25,12 @@
 <h1>Recommended sets of Words</h1>
 
 <%
-    String jsonStr = RecommendEvents.readFile("D:/Ucebne_materialy/Deviaty_semester/Recommender_systems/Projekt/PV245/vocabularyrecommender/tfidf_output.json");
+    String jsonStr = RecommendEvents.readFile("d:\\school\\MUNI\\podzim2016\\recsys\\PV245-vocabulary_recommender\\vocabularyrecommender\\tfidf_output.json");
 %>
 
 <%
     JSONArray jsonarray = new JSONArray(jsonStr);
-    Map<Integer, List<String>>  mapOfWords = new HashMap<>();
+    Map<Integer, List<String>>  mapOfWords = new HashMap<Integer, List<String>>();
     for (int i = 0; i < jsonarray.length(); i++) {
         JSONObject jsonobject = jsonarray.getJSONObject(i);
 %>
