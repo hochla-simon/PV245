@@ -57,8 +57,10 @@ kde
 keď
 kto
 ktorá
-ktoré 	ktorou
+ktoré 	
+ktorou
 ktorý
+ktorych
 ktorí
 ku
 lebo
@@ -169,3 +171,4 @@ z
 za
 zo
 že
+napr
