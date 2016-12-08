@@ -24,6 +24,9 @@ public class TfIdf {
     public static String getTfidf(int limit, String filename, String scripname) {
         String line = "";
 
+        //removing the starting slash of the path causing error (Windows users)
+        if (scripname.charAt(2) ==':') scripname = scripname.substring(1);
+
         try {
             String[] argv = new String[4];
             argv[0] = "ruby";
@@ -45,7 +48,7 @@ public class TfIdf {
             process.waitFor();
 
             BufferedReader processIn = new BufferedReader(
-                    new InputStreamReader(process.getInputStream()));
+                    new InputStreamReader(process.getInputStream(), "UTF-8"));
 
             line = processIn.readLine();
             System.out.println("Tfidf output: " + line);

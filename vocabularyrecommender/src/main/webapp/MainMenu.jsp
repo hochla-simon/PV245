@@ -5,10 +5,10 @@
 <div>Welcome <c:out value="${details.name}"/></div>
 Recommend vocabulary based on:
 <br>
-<a href="/RecommendEvents"> Events</a>
+<a href="RecommendEvents"> Events</a>
 <br>
-<a href="/RecommendFeed"> Feed</a>
+<a href="RecommendFeed"> Feed</a>
 <br>
-<a href="/RecommendPagesFeed"> Pages feed</a>
+<a href="RecommendPagesFeed"> Pages feed</a>
 </body>
 </html>
