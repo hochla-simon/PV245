@@ -21,7 +21,7 @@
 <%
     ServletContext ctx = getServletContext();
     String jsonStr = TfIdf.getTfidf(3, "events.json", ctx.getResource("/WEB-INF/tfidf.rb").getFile() );
-//    String jsonStr = Keywords.getKeywords(3, "events.json", ctx.getResource("/WEB-INF/keywords.rb").getPath() );
+//    String jsonStr = Keywords.getKeywords(3, "events.json", ctx.getResource("/WEB-INF/keywords.rb").getFile() );
 %>
 
 <%
