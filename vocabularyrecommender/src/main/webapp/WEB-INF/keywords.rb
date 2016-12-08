@@ -89,7 +89,7 @@ def get_keywords(filename, limit)
 	  pom[:event_name] = texts[i].keys[0];
 	  pom[:language] = whatLanguage text
 	  pom[:words] = keywords.top(limit)
-
+	  i += 1
 	  final << pom
 	end
 
