@@ -45,16 +45,13 @@
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
                     <li>
-                        <a href="#">Sign in / Log out</a>
+                        <a href="index.jsp">Signing page</a>
                     </li>
                     <li>
-                        <a href="#">Source of Words</a>
+                        <a href="MainMenu.jsp">Source of Words</a>
                     </li>
                     <li>
-                        <a href="#">Words Overview</a>
-                    </li>
-                    <li>
-                        <a href="#">Complete page</a>
+                        <a href="Complete.jsp">Complete page</a>
                     </li>
                 </ul>
             </div>

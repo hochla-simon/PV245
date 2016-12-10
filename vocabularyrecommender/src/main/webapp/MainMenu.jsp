@@ -1,14 +1,14 @@
 <%@page contentType="text/html;charset=utf-8" pageEncoding="UTF-8" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<html>
-<body>
-<div>Welcome <c:out value="${details.name}"/></div>
-Recommend vocabulary based on:
-<br>
-<a href="RecommendEvents"> Events</a>
-<br>
-<a href="RecommendFeed"> Feed</a>
-<br>
-<a href="RecommendPagesFeed"> Pages feed</a>
-</body>
-</html>
+<%@include file="includes/header.jsp" %>
+<div class="jumbotron">
+  <h1>Welcome ${details.name}</h1>
+  <p>We have downloaded your FB data to get vocabulary speicaly tailored to your needs. You can gat words based on your events, feeds or pages you like.</p>
+  <div class="text-center">
+    <div class="btn-group btn-group-lg" role="group">
+      <a href="RecommendEvents" role="button" class="btn btn-default">Events</a>
+      <a href="RecommendFeed" role="button" class="btn btn-default">Feed</a>
+      <a href="RecommendPagesFeed" role="button" class="btn btn-default">Pages feed</a>
+    </div> 
+  </div>
+</div>
+<%@include file="includes/footer.jsp" %>
