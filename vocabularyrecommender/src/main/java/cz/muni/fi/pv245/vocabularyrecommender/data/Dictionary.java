@@ -92,14 +92,10 @@ public class Dictionary {
 //            System.out.println(mentry.getValue());
 //        }
     }
-
-    public static HashMap getFinalVocabulary(String path, Integer limit) {
-        JSONParser parser = new JSONParser();
+    
+    private static HashMap processJson(JSONArray events, Integer limit) {
         HashMap<String, HashMap<String, HashMap<String, String>>> eventsMap = new HashMap();
-        try {
-            JSONArray events = (JSONArray) parser.parse(new InputStreamReader(new FileInputStream(path), "UTF-8"));
-            // processing json file
-            for (int i=0; i<events.size(); i++) {
+        for (int i=0; i<events.size(); i++) {
                 JSONObject event = (JSONObject) events.get(i);
                 JSONArray words = (JSONArray) event.get("words");
                 String eventName = event.get("event_name").toString();
@@ -117,11 +113,35 @@ public class Dictionary {
                 }
                 eventsMap.put(eventName, wordsMap);
             }
+        return eventsMap;
+    }
+
+    public static HashMap getFinalVocabulary(String path, Integer limit) {
+        JSONParser parser = new JSONParser();
+        HashMap<String, HashMap<String, HashMap<String, String>>> eventsMap = new HashMap();
+        try {
+            JSONArray events = (JSONArray) parser.parse(new InputStreamReader(new FileInputStream(path), "UTF-8"));
+            // processing json file
+            eventsMap = processJson(events, limit);
 
         } catch (FileNotFoundException e) {
                 e.printStackTrace();
         } catch (IOException e) {
                 e.printStackTrace();
+        } catch (ParseException e) {
+                e.printStackTrace();
+        }   
+        return eventsMap;
+    }
+    
+    public static HashMap getFinalVocabularyFromString(String jsonString, Integer limit) {
+        JSONParser parser = new JSONParser();
+        HashMap<String, HashMap<String, HashMap<String, String>>> eventsMap = new HashMap();
+        try {
+            JSONArray events = (JSONArray) parser.parse(jsonString);
+            // processing json file
+            eventsMap = processJson(events, limit);
+
         } catch (ParseException e) {
                 e.printStackTrace();
         }   
