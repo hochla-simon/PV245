@@ -63,6 +63,7 @@ import java.util.concurrent.TimeUnit;
 public class Dictionary {
     
     static int requestCount = 0;
+    static int eventCount = 3;
     
     public static void main(String[] args) throws IOException, ParseException {
         // this is the example how to call getFinalVocabulary an process result
@@ -95,7 +96,7 @@ public class Dictionary {
     
     private static HashMap processJson(JSONArray events, Integer limit) {
         HashMap<String, HashMap<String, HashMap<String, String>>> eventsMap = new HashMap();
-        for (int i=0; i<events.size(); i++) {
+        for (int i=0; i<events.size() && i < eventCount; i++) {
                 JSONObject event = (JSONObject) events.get(i);
                 JSONArray words = (JSONArray) event.get("words");
                 String eventName = event.get("event_name").toString();
