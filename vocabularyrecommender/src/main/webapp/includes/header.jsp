@@ -65,5 +65,5 @@
 
     <!-- Page Content -->
     <div class="container">
-        <div class="row">
+        <div class="row" style="width: 80%; margin: 0 auto;">
             <div class="col-lg-12">
