@@ -9,8 +9,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.List;
+import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
+import javafx.util.Pair;
 
 @WebServlet(urlPatterns = {"/practising"})
 public class Practising extends HttpServlet {
@@ -20,41 +22,52 @@ public class Practising extends HttpServlet {
         req.setCharacterEncoding("utf-8");
 
         HttpSession session = req.getSession(true);
-        String word;
-        List<String> words;
+        Pair<String, String> word;
+        TreeMap<String, String> words = null;
 
         if (req.getParameter("Yes, I knew") != null) {
-            words = (List<String>) session.getAttribute("words");
-            words.remove(0);
+            words = (TreeMap<String, String>) session.getAttribute("words");
+            words.remove(words.firstKey());
 
-            if (words.size() == 0) {
+            if (words.isEmpty()) {
                 req.getRequestDispatcher("/RecommendEvents.jsp").forward(req, res);
             }
-
-            word = words.get(0);
+           
+            String firstKey = words.firstKey();
+            word = new Pair(firstKey, words.get(firstKey));
         } else if (req.getParameter("Oops, I was wrong") != null) {
-            words = (List<String>) session.getAttribute("words");
-
+            words = (TreeMap<String, String>) session.getAttribute("words");
+            
             if (words.size() > 1) {
-                words.remove(0);
+                words.remove(words.firstKey());
             }
-
-            word = words.get(0);
-            words.add(word);
+            String firstKey = words.firstKey();
+            word = new Pair(firstKey, words.get(firstKey));
+            words.put(word.getKey(), word.getValue());
         } else {
             //request came from the recommender page
-            Map<Integer, List<String>> wordsMap = (Map<Integer, List<String>>) session.getAttribute("wordsMap");
+            Map<Integer, HashMap<String, HashMap<String, String>>>  wordsMapOfMapsOfMaps =
+                    (Map<Integer, HashMap<String, HashMap<String, String>>>) session.getAttribute("wordsMap");
             String item = req.getParameter("item");
 
-            words = wordsMap.get(Integer.parseInt(item));
-            word = words.get(0);
+            HashMap<String, HashMap<String, String>> wordsMapOfMaps =
+                    wordsMapOfMapsOfMaps.get(Integer.parseInt(item));
+            
+            words = new TreeMap<String, String>();
+            for (Map.Entry pair : wordsMapOfMaps.entrySet()) {
+                for (Map.Entry pair2 : ((HashMap<String, String>)pair.getValue()).entrySet()) {
+                    words.put((String) pair2.getKey(), (String) pair2.getValue());
+                }
+            }
+             
+            String firstKey = words.firstKey();
+            word = new Pair(firstKey, words.get(firstKey));
         }
-
-        session.setAttribute("word", word);
+           
+        session.setAttribute("word", word.getKey());
         session.setAttribute("words", words);
 
-        String meaning = Dictionary.getDefinitionUsing(word, true);
-        req.setAttribute("meaning", meaning);
+        req.setAttribute("meaning", word.getValue());
 
         req.getRequestDispatcher("/Practising.jsp").forward(req, res);
     }
