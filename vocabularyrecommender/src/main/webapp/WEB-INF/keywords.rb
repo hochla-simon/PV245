@@ -22,7 +22,7 @@ def whatLanguage txt
 	elsif txt.include? 'se'
 		:cs
 	else
-		:en
+		:sk
 	end
 end
 

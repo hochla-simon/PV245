@@ -26,7 +26,7 @@ def whatLanguage txt
 	elsif txt.include? 'se'
 		:cs
 	else
-		:en
+		:sk
 	end
 end
 
@@ -39,6 +39,7 @@ def tfidf(filename, limit)
 	file = File.read(filename,:encoding => "utf-8")
 
 	texts = JSON.parse(file)
+	texts.delete_if{ |k| k.values[0] == ""}
 
 	corpus =  Array.new
 	texts.each { |event|
