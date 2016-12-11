@@ -9,6 +9,7 @@ end
 require File.join(basedir,'tf-idf-lib.rb')
 require 'json'
 require "pp"
+require 'wtf_lang'
 # require 'active_support/inflector'
 
 
@@ -28,6 +29,11 @@ def whatLanguage txt
 	else
 		:sk
 	end
+end
+
+def whatLanguage2 txt 
+	WtfLang::API.key = "e95f44afcf88c71175b263228844e3e5"
+    return txt.lang
 end
 
 def tfidf(filename, limit)
@@ -57,7 +63,7 @@ def tfidf(filename, limit)
 	output.each do |my_hash|
 		pom = Hash.new
 		pom[:event_name] = texts[i].keys.first;
-		pom[:language] = whatLanguage corpus[i]
+		pom[:language] = whatLanguage2 corpus[i]
 		pom[:words] = my_hash.keys
 		final << pom
 		i += 1

@@ -5,6 +5,7 @@
 require 'highscore'
 require 'json'
 require "i18n"
+require 'wtf_lang'
 
 def basedir
   File.dirname(__FILE__)
@@ -26,18 +27,24 @@ def whatLanguage txt
 	end
 end
 
+def whatLanguage2 txt 
+	WtfLang::API.key = "e95f44afcf88c71175b263228844e3e5"
+	 
+    return txt.lang
+end
 
-def what_blacklist(text)
+def what_blacklist(text, language)
 	# case CLD.detect_language(text)[:code]
-	case whatLanguage(text)
-	when :cs
+	case language
+	when "cs"
 		return @blacklistCZ
-	when :sk
+	when "sk"
 		return @blacklistSK
 	else
 		return @blacklistENG
 	end
 end
+
 
 def count_keywords(text, blacklist)
 	keywords = text.keywords(blacklist) do
@@ -72,7 +79,8 @@ def get_keywords(filename, limit)
 
 	file = File.read(filename,:encoding => "utf-8")
 	texts = JSON.parse(file)
-
+	texts.delete_if{ |k| k.values[0] == ""}
+	
 	corpus =  Array.new
 	texts.each { |event|
 	  corpus << event.values[0] }
@@ -80,14 +88,14 @@ def get_keywords(filename, limit)
 	final = []
 	i = 0
 	corpus.each do |text|
-
-	  blacklist = what_blacklist(text)
+	  language = whatLanguage2 text
+	  blacklist = what_blacklist(text,language)
 	  text = I18n.transliterate text.gsub(/[0-9\-–★:!@%&.,?><\/}{(~_)"#$\*]/," ")
 	  keywords = count_keywords(text, blacklist)
 
 	  pom = Hash.new
 	  pom[:event_name] = texts[i].keys[0];
-	  pom[:language] = whatLanguage text
+	  pom[:language] = language
 	  pom[:words] = keywords.top(limit)
 	  i += 1
 
