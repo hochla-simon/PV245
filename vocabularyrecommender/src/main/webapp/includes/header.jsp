@@ -50,9 +50,6 @@
                     <li>
                         <a href="MainMenu.jsp">Source of Words</a>
                     </li>
-                    <li>
-                        <a href="Complete.jsp">Complete page</a>
-                    </li>
                 </ul>
             </div>
             <!-- /.navbar-collapse -->
