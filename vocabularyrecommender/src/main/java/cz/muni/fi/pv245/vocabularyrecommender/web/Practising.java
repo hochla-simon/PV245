@@ -1,7 +1,5 @@
 package cz.muni.fi.pv245.vocabularyrecommender.web;
 
-import cz.muni.fi.pv245.vocabularyrecommender.data.Dictionary;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -75,6 +73,9 @@ public class Practising extends HttpServlet {
             word = new Pair(key, words.get(key));
 
         //request came from the recommender page
+        } else if (req.getParameter("Finish practising") != null) {
+            req.getRequestDispatcher("/RecommendEvents.jsp").forward(req, res);
+            return;
         } else {
             //datastructure obtained from the recommender page
             Map<Integer, HashMap<String, HashMap<String, String>>>  wordsMapOfMapsOfMaps =
