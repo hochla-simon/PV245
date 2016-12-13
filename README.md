@@ -1,5 +1,5 @@
-# PV245-vocabulary_recommender
-
+# Vocabulary Recommender
+University project for subject PV245 Recommender systems.
 Customized way to learn vocabulary. You are provided new words based on the content of your FB account.
 
 _Project structure:_
