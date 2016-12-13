@@ -24,7 +24,8 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
  
 /**
- *
+ * This class provides functions for obtaining required data from FB account,
+ * such as events, pages feed and user's feed.
  * @author Daniel
  */
 public class FbDataDownloader {

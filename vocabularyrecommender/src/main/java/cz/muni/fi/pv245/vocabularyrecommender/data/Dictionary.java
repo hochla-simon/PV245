@@ -24,14 +24,16 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.TimeUnit;
 /**
  * The main task of this class is to read the input json file, go through all obtained words and 
  * find for them vocabulary with explanations
+ * Used APIs: 
+ *   - Pearson for words definitions
+ *   - Oxford dictionaries for obtaining the vocabulary
+ *   - Google cloud api for translations
  * @author Daniel
  * 
     Example of input json file:
@@ -39,7 +41,7 @@ import java.util.concurrent.TimeUnit;
      {"event_name":"nazov2","language":"en","words":["big","mistake","bird"]},
     ]
 
-    Example of output structure:
+    Example of output structure (getFinalVocabulary method):
     {"nazov1": {"rok":          {"slovo1": "vysvetlenie1",
                                  "slovo2": "vysvetlenie2",
                                  "slovo3": "vysvetlenie3"}
