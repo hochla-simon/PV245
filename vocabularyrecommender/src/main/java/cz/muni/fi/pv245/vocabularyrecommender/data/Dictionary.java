@@ -65,7 +65,7 @@ import java.util.concurrent.TimeUnit;
 public class Dictionary {
     
     static int requestCount = 0;
-    static int eventCount = 3000;
+    static int eventCount = 3;
     
     public static void main(String[] args) throws IOException, ParseException {
         // this is the example how to call getFinalVocabulary
@@ -276,6 +276,7 @@ public class Dictionary {
     }
     
     private static List getWordsFromDomain(String domain, Integer limit) {
+        List<String> selection = new ArrayList<>();
         URL url = null;
         try {
             url = new URL("https://od-api.oxforddictionaries.com:443/api/v1/wordlist/en/domains%3D" + domain);
@@ -284,11 +285,13 @@ public class Dictionary {
         System.out.println("Getting words for domain: " + domain);
         List<String> result = new ArrayList<>();
         JsonObject obj = processRequest(url);
-        for (int i=0; i<obj.get("results").getAsJsonArray().size(); i++) {
-            result.add(obj.get("results").getAsJsonArray().get(i).getAsJsonObject().get("word").getAsString());
-        }
-        
-        List<String> selection = new ArrayList<>();
+        try {
+            for (int i=0; i<obj.get("results").getAsJsonArray().size(); i++) {
+                result.add(obj.get("results").getAsJsonArray().get(i).getAsJsonObject().get("word").getAsString());
+            }
+        } catch (Exception e) {
+            return selection;
+        }        
         if (limit >= result.size()) {
             return result;
         } else {
