@@ -162,7 +162,9 @@ public class Dictionary {
         List<String> result = getSimilarWords(word, limit*2);
         int counter = 0;
         String wordDef = getDefinition(word);
-        map.put(word, wordDef);
+        if (wordDef.length() > 0) {
+            map.put(word, wordDef);
+        }
         for (String s : result) {
             String def = getDefinition(s);
             if (def.length() > 0) {
