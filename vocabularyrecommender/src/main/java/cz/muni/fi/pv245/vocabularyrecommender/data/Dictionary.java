@@ -327,8 +327,8 @@ public class Dictionary {
                 requestCount = 0;
             }
         } catch (Exception e) {}
-        final String app_id = "4335cf05";
-        final String app_key = "9035da7c9722e552b82062e6a3e95cea";
+        final String app_id = "50b3423b";
+        final String app_key = "44a348b2257575436381dfaf93fdae66";
         try {
             HttpsURLConnection urlConnection = (HttpsURLConnection) url.openConnection();
             urlConnection.setRequestProperty("Accept","application/json");
