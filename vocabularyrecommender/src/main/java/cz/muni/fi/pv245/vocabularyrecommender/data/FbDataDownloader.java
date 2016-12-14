@@ -32,7 +32,7 @@ public class FbDataDownloader {
     
     public static void main(String[] args) throws IOException, MalformedURLException {
         String MY_ACCESS_TOKEN = "EAACEdEose0cBAGJmOGmDRZAQAq1ZBNqGaIGHM3z0ZBa6d46p2foMzBxZCSZBx0GrE45wxBZAJIo2USsczTyc1kyvgXkvmh0aA8yhY2FGBX3bpLEJMpZCn1d3z6oCmH3dMkY27K7aTZAyD1pWEkAHSnsdaAIoKoL7MmS8T6rA9b4jwwZDZD";
-        downloadFbData(MY_ACCESS_TOKEN);
+        //downloadFbData(MY_ACCESS_TOKEN);
     }  
     
     public static void downloadFbData(String token) throws MalformedURLException, IOException {

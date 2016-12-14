@@ -65,10 +65,10 @@ import java.util.concurrent.TimeUnit;
 public class Dictionary {
     
     static int requestCount = 0;
-    static int eventCount = 3;
+    static int eventCount = 3000;
     
     public static void main(String[] args) throws IOException, ParseException {
-        // this is the example how to call getFinalVocabulary an process result
+        // this is the example how to call getFinalVocabulary
         HashMap<String, HashMap<String, HashMap<String, String>>> result = new HashMap();
         result = getFinalVocabulary("d:\\school\\MUNI\\podzim2016\\recsys\\PV245-vocabulary_recommender\\vocabularyrecommender\\tfidf_output.json", 5);
         System.out.println("======================================================================");
@@ -83,17 +83,6 @@ public class Dictionary {
                 }
             }
         }
-        //translateText("stretnutie", "sk");
-        //List<String> result = getSimilarWords("computer", 10);
-        //List<String> result = getSimilarWords("run", 10);
-//        HashMap<String, String> map = getWordlistFor("bird", 10);
-//        Set set = map.entrySet();
-//        Iterator iterator = set.iterator();
-//        while(iterator.hasNext()) {
-//            Map.Entry mentry = (Map.Entry)iterator.next();
-//            System.out.print(mentry.getKey() + ": ");
-//            System.out.println(mentry.getValue());
-//        }
     }
     
     private static HashMap processJson(JSONArray events, Integer limit) {
