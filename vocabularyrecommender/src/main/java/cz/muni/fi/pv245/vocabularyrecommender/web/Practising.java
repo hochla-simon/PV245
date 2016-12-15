@@ -122,6 +122,6 @@ public class Practising extends HttpServlet {
         
         req.setAttribute("meaning", word.getValue());
 
-        req.getRequestDispatcher("/Practising.jsp").forward(req, res);
+        req.getRequestDispatcher("/MainMenu.jsp").forward(req, res);
     }
 }
